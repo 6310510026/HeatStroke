@@ -1,0 +1,195 @@
+/* Reset styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+}
+
+/* Header styles */
+header {
+    background-color: #b2f5b4;
+    display: flex;
+    justify-content: space-between; /* จัดให้ h1 อยู่ซ้าย ปุ่มอยู่ขวา */
+    align-items: center;
+    padding: 10px 20px;
+    position: fixed; /* Fix header at the top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure header is above other elements */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #006400;
+    margin: 0;
+}
+
+/* ปรับปุ่ม toggle ให้อยู่ภายใน header และฝั่งขวา */
+.sidebar-toggle {
+    font-size: 20px; /* ขนาดของไอคอนในปุ่ม */
+    cursor: pointer;
+    right: 70px;
+    background: none;
+    border: none;
+    color: #006400;
+    padding: 10px 15px; /* ปรับ padding ให้เหมาะสมกับ header */
+    border-radius: 10px; /* ขอบมน */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease;
+    height: 30px; /* กำหนดความสูงให้เหมาะสมกับ header */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 30px
+}
+
+/* เมื่อ hover ปุ่ม */
+.sidebar-toggle:hover {
+    background-color: white;
+}
+
+/* ปรับให้ sidebar อยู่ด้านขวา */
+.sidebar-checkbox {
+    display: none;
+}
+
+.sidebar {
+    position: absolute;
+    top: 90px; /* ตั้งระยะห่างจากปุ่ม toggle */
+    right: 0; /* ย้าย sidebar ไปทางขวา */
+    width: 200px;
+    background-color: #c6ccc4; /* สีเขียว */
+    color: white;
+    padding: 20px;
+    border-radius: 10px; /* ขอบมน */
+    display: none;
+    transition: right 0.3s ease;
+    z-index: 999; /* ให้ sidebar อยู่เหนือเนื้อหาหลัก */
+    margin-right: 10px
+}
+
+/* เมื่อ checkbox ถูกเลือก sidebar จะแสดง */
+.sidebar-checkbox:checked + .sidebar {
+    display: block; /* แสดง sidebar */
+}
+
+/* เนื้อหาหลัก */
+.content {
+    margin: 90px 20px 20px 20px; /* ขยับเนื้อหาลงมาจาก header */
+    padding: 20px;
+    background-color: #b2f5b4;
+    border-radius: 10px;
+    width: 50%; /* กำหนดความกว้างของกล่องเป็นครึ่งหนึ่งของหน้าจอ */
+    max-width: 1200px; /* กำหนดความกว้างสูงสุดเพื่อไม่ให้กว้างเกินไปบนหน้าจอขนาดใหญ่ */
+    margin-right: auto; /* จัดให้อยู่ทางซ้าย */
+    transition: margin-right 0.3s ease;
+}
+
+/* ขยายเนื้อหาหลักเมื่อ sidebar แสดง */
+.sidebar-checkbox:checked ~ .content {
+    margin-right: 250px; /* ขยายเนื้อหาหลักให้ห่างจาก sidebar */
+}
+
+body.login {
+    background-color: #b2f5b4;
+}
+.login-right {
+    background-color: #ffffff;
+    width: 55%; /* กำหนดความกว้างของกล่อง */
+    height: 1024px;
+    /*max-width: 1200px; กำหนดความกว้างสูงสุดเพื่อไม่ให้กว้างเกินไปบนหน้าจอขนาดใหญ่ */
+    margin-left: auto; /* จัดให้อยู่ทางขวา */
+    transition: margin-right 0.3s ease;
+}
+
+.login-left {
+    /*margin: 90px 20px 20px 20px; ขยับเนื้อหาลงมาจาก header */
+    background-color: #ffffff;
+    width: 45%; /* กำหนดความกว้างของกล่องเป็นครึ่งหนึ่งของหน้าจอ */
+    height: 1024px;
+    max-width: 1200px; /* กำหนดความกว้างสูงสุดเพื่อไม่ให้กว้างเกินไปบนหน้าจอขนาดใหญ่ */
+    margin-right: auto; /* จัดให้อยู่ทางซ้าย */
+    transition: margin-right 0.3s ease;
+}
+
+.login-form-container {
+    width: 100%; /* กำหนดความกว้างเต็ม */
+    max-width: 400px; /* จำกัดความกว้างสูงสุด */
+    padding: 60px; /* ระยะห่างภายในกล่องเท่าๆ กันทุกด้าน */
+    background-color: none; /* สีพื้นหลัง */
+    border-radius: 10px; /* ขอบมุมโค้งมน */
+    display: flex; /* ใช้ Flexbox */
+    flex-direction: column; /* จัดวางเนื้อหาในแนวตั้ง */
+    align-items: left; /* จัดให้อยู่กึ่งกลางในแนวนอน */
+    justify-content: left; /* จัดให้อยู่กึ่งกลางในแนวตั้ง */
+    text-align: left; /* จัดข้อความให้อยู่กึ่งกลาง */
+}
+
+body.login .login-form-container h1 {
+    font-size: 4rem; /* ขนาดใหญ่ขึ้น */
+    font-weight: bold; /* ตัวหนา */
+    color: #006400; /* สีที่ดูเด่น */
+    margin-bottom: 20px; /* เพิ่มระยะห่างจากฟอร์ม */
+}
+
+/* ตกแต่งฟอร์ม */
+body.login .login-form-container form {
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* จัดเรียงเนื้อหาในแนวตั้ง */
+    gap: 5px; /* เพิ่มระยะห่างระหว่างช่องฟอร์ม */
+}
+
+/* สไตล์ช่อง input */
+body.login .login-form-container form input[type="text"],
+body.login .login-form-container form input[type="password"],
+body.login .login-form-container form input[type="email"] {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc; /* ขอบเรียบ */
+    border-radius: 5px; /* ขอบมุมมน */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* เงาด้านใน */
+    transition: border-color 0.3s ease;
+}
+
+/* เปลี่ยนสีขอบเมื่อ hover/focus */
+body.login .login-form-container form input[type="text"]:focus,
+body.login .login-form-container form input[type="password"]:focus,
+body.login .login-form-container form input[type="email"]:focus{
+    border-color: #006400; /* สีขอบเมื่อเน้น */
+    outline: none; /* ลบกรอบ default */
+}
+
+/* ตกแต่งปุ่ม */
+body.login .login-form-container form button {
+    padding: 8px 9px; /* ลดขนาด padding */
+    font-size: 0.9rem; /* ลดขนาดข้อความ */
+    width: 20%; /* ให้ขนาดของปุ่มพอดีกับข้อความ */
+    border-radius: 5px; /* ขอบมนเหมือนเดิม */
+    background-color: #006400; /* สีพื้นหลัง */
+    color: white; /* สีข้อความ */
+    border: none; /* ไม่มีขอบ */
+    cursor: pointer; /* เปลี่ยน cursor */
+    transition: background-color 0.3s ease;
+}
+
+/* เปลี่ยนสีปุ่มเมื่อ hover */
+body.login .login-form-container form button:hover {
+    background-color: #006400; /* สีเข้มขึ้นเมื่อ hover */
+}
+
+/* ลิงก์ในฟอร์ม */
+body.login .login-form-container a {
+    color: #006400;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+/* ลิงก์เมื่อ hover */
+body.login .login-form-container a:hover {
+    text-decoration: underline;
+}

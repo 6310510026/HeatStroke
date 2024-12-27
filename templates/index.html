@@ -1,13 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Heatstroke</h1>
-    <h2>Hi {{ request.user.username }}!</h2>
-    <a href="{% url 'logout' %}">Logout</a>
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+{% block title %} HOME {% endblock %}
+{% block content%}
+    <h1>Hi {{ request.user.username }}!</h1>
+    <h2>These are your information!</h2>
+    <url>
+        <li>Heart Rate :</li>
+        <li>Core Temperature :</li>
+        <li>Ambient Temperature :</li>
+        <li>Humidity :</li>
+        <li>Galvanic Skin Response :</li>
+    </url>
+    <br>
+{% endblock  %}
