@@ -26,20 +26,25 @@
             
                 <label for="password2">Confirm Password:</label>
                 <input type="password" id="password2" name="password2" required><br>
-            
+
+                <select name="role">
+                    <option value="member">สมาชิกกลุ่ม</option>
+                    <option value="group_admin">ผู้ดูแลกลุ่ม</option>
+                </select>
+                <br>
                 <button type="submit">Register</button>
             </form>
         
             <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
-        </div>
-    </div>    
-    <!-- แสดงข้อความแจ้งเตือน -->
-    {% if messages %}
+                <!-- แสดงข้อความแจ้งเตือน -->
+        {% if messages %}
         <ul>
             {% for message in messages %}
-                <li>{{ message }}</li>
+            <li>{{ message }}</li>
             {% endfor %}
         </ul>
-    {% endif %}
+        {% endif %}
+        </div>
+    </div>    
 </body>
 </html>

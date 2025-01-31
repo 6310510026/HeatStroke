@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'level',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +126,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # เพิ่ม
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
+AUTH_USER_MODEL = "level.CustomUser"  # แทนที่ "app_name" ด้วยชื่อแอปของคุณ
+
