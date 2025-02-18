@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Display Data {% endblock %}
+
+{% block style %}
+    <!-- Include Plotly.js library -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- Include Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="display_data">
+        <h1>Display Data</h1>
+        <br>
+        <label for="startDate">Start Date:</label>
+        <input type="text" id="startDate" class="datepicker" placeholder="Select start date...">
+        <label for="endDate">End Date:</label>
+        <input type="text" id="endDate" class="datepicker" placeholder="Select end date...">
+
+        <button id="applyDateRange">Apply</button>
+        <button id="applyToday">1 Day</button>
+        <button id="applyThisWeek">7 Days</button>  
+
+        <div class="grid-container">
+            <div class="grid-item">
+                <h2>Environment Temperature</h2>
+                <div id="temperaturePlot"></div>
+                {% for data in daily_averages %}
+                    <p>Avg Temp: {{ data.avg_temperature|floatformat:"2" }} °C</p>
+                {% endfor %}
+            </div>
+            <div class="grid-item">
+                <h2>Relative Humidity</h2>
+                <div id="humidityPlot"></div>
+                {% for data in daily_averages %}
+                    <p>Avg Humidity: {{ data.avg_humidity|floatformat:"2" }} %</p>
+                {% endfor %}
+            </div>
+            <div class="grid-item">
+                <h2>Body Temperature</h2>
+                <div id="bodyTempPlot"></div>
+                {% for data in daily_averages %}
+                    <p>Avg Body Temp: {{ data.avg_body_temp|floatformat:"2" }} °C</p>
+                {% endfor %}
+            </div>
+            <div class="grid-item">
+                <h2>Heart Rate</h2> 
+                <div id="heartRatePlot"></div>
+                {% for data in daily_averages %}
+                    <p>Avg Heart Rate: {{ data.avg_heart_rate|floatformat:"2" }} bpm</p>
+                {% endfor %}
+            </div>
+            <div class="grid-item">
+                <h2>Risk</h2> 
+                <div id="riskPlot"></div>
+                {% for data in daily_averages %}
+                    <p>Avg Risk: {{ data.avg_risk|floatformat:"2" }}</p>
+                {% endfor %}
+            </div>
+            <div class="grid-item">
+                <h2>Environment Temp vs Body Temp</h2>
+                <div id="combinedTempPlot"></div>
+            </div>
+            <div class="grid-item">
+                <h2>All Sensor Data</h2>
+                <div id="allPlot"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script>
+        // Line Plots
+        createLinePlot('temperaturePlot', {{ timestamps|safe }}, {{ temperatures|safe }}, 'Time', 'Temp (°C)', 'Environment Temperature');
+        createLinePlot('humidityPlot', {{ timestamps|safe }}, {{ humidity_values|safe }}, 'Time', 'Humidity (%)', 'Humidity');
+        createLinePlot('bodyTempPlot', {{ timestamps|safe }}, {{ body_temps|safe }}, 'Time', 'Body Temp (°C)', 'Body Temperature');
+        createLinePlot('heartRatePlot', {{ timestamps|safe }}, {{ heart_rates|safe }}, 'Time', 'Heart Rate (bpm)', 'Heart Rate');
+
+        // Risk Plot
+        var trace = {
+            x: {{ timestamps|safe }},
+            y: {{ risks|safe }},
+            mode: 'lines+markers',
+            type: 'scatter'
+        };
+        var layout = {
+            title: 'Risk',
+            xaxis: { title: 'Time' },
+            yaxis: { title: 'Risk', range: [0, 8], fixedrange: true },
+            shapes: [
+                { type: 'rect', xref: 'paper', yref: 'y', x0: 0, y0: 0, x1: 1, y1: 2, fillcolor: 'green', opacity: 0.3, line: { width: 0 } },
+                { type: 'rect', xref: 'paper', yref: 'y', x0: 0, y0: 2, x1: 1, y1: 4, fillcolor: 'yellow', opacity: 0.3, line: { width: 0 } },
+                { type: 'rect', xref: 'paper', yref: 'y', x0: 0, y0: 4, x1: 1, y1: 6, fillcolor: 'orange', opacity: 0.3, line: { width: 0 } },
+                { type: 'rect', xref: 'paper', yref: 'y', x0: 0, y0: 6, x1: 1, y1: 8, fillcolor: 'red', opacity: 0.3, line: { width: 0 } }
+            ]
+        };
+        Plotly.newPlot('riskPlot', [trace], layout);
+
+        // Combined Temperature Plot
+        Plotly.newPlot('combinedTempPlot', {{ combined_plot|safe }});
+        Plotly.newPlot('allPlot', {{ all_plot|safe }});
+
+        // Date Picker
+        flatpickr(".datepicker", { dateFormat: "Y-m-d" });
+
+        // Apply Button Event Handlers
+        document.getElementById("applyToday").addEventListener("click", function() {
+            var today = new Date();
+            var formattedDate = today.toISOString().split('T')[0];
+            window.location.href = window.location.pathname + "?startDate=" + formattedDate + "&endDate=" + formattedDate;
+        });
+
+        document.getElementById("applyThisWeek").addEventListener("click", function() {
+            var today = new Date();
+            var sevenDaysAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            var formattedStartDate = sevenDaysAgo.toISOString().split('T')[0];
+            var formattedEndDate = today.toISOString().split('T')[0];
+            window.location.href = window.location.pathname + "?startDate=" + formattedStartDate + "&endDate=" + formattedEndDate;
+        });
+
+        document.getElementById("applyDateRange").addEventListener("click", function() {
+            var startDate = document.getElementById("startDate").value;
+            var endDate = document.getElementById("endDate").value;
+            window.location.href = window.location.pathname + "?startDate=" + startDate + "&endDate=" + endDate;
+        });
+    </script>
+{% endblock %}

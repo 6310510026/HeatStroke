@@ -10,6 +10,12 @@ class CustomUser(AbstractUser):
     ]
     role = models.CharField(max_length=15, choices=ROLE_CHOICES, default="member")
 
+    groups = models.ManyToManyField(
+        "GroupModel",
+        related_name="group_members",  # ✅ เปลี่ยน related_name เพื่อไม่ให้ชนกับ GroupModel
+        blank=True
+    )
+
     def is_site_admin(self):
         return self.role == "site_admin"
 
@@ -24,7 +30,6 @@ class CustomUser(AbstractUser):
         return str(self.id).zfill(3)
 
     def save(self, *args, **kwargs):
-        # ตรวจสอบว่าเป็น staff และ role ยังไม่ใช่ site_admin
         if self.is_staff and self.role not in ["site_admin"]:
             self.role = "site_admin"
         super().save(*args, **kwargs)
@@ -41,10 +46,15 @@ class GroupModel(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="created_groups"
-    )  # เชื่อมกับ User ที่สร้าง Group
+    )  # ผู้สร้างกลุ่ม
+
+    members = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="user_groups",  #  เปลี่ยน related_name ให้ไม่ชนกัน
+        blank=True
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)  # วันที่สร้างอัตโนมัติ
 
     def __str__(self):
         return self.name
-

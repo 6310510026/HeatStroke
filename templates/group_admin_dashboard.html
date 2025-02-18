@@ -14,7 +14,7 @@
         {% for group in user_groups %}
             <li class="group-item">
                 <strong>{{ group.name }}</strong> - Created on: {{ group.created_at|date:"d M Y" }}
-                <a href="#" class="btn-join-group">View Group</a>
+                <a href="{% url 'view_group' group.id %}"class="btn-join-group">View Group</a>
             </li>
         {% empty %}
             <p>You are not an admin of any group.</p>

@@ -71,11 +71,9 @@ def index(request):
 
     
 @login_required
-def group_admin_dashboard(request):
-    if not request.user.is_group_admin():
-        return redirect("index")  # หากไม่ใช่ group admin ให้ไปหน้า index
-    return render(request, "group_admin_dashboard.html")
-
-
 def member_dashboard(request):
-    return render(request, "index.html")
+    return render(request, "index.html") #ควรเปลี่ยนเป็น display_data
+
+def information(request):
+    return render(request, "information.html")
+        

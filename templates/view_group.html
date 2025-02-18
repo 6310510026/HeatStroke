@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block title %} {{ group.name }} {% endblock %}
+
+{% block content %}
+        <!-- ✅ ส่วนรายละเอียดกลุ่ม (ซ้าย) -->
+        <div class="group-details">
+            <h1>{{ group.name }}</h1>
+            <p><strong>Description:</strong> {{ group.description }}</p>
+            <p><strong>Created by:</strong> {{ group.created_by.username }}</p>
+            <p><strong>Created on:</strong> {{ group.created_at|date:"d M Y" }}</p>
+            <br>
+            <a href="{% url 'group_admin_dashboard' %}" class="btn-back-home">Back</a>
+            <a href="{% url 'add_member' group.id %}" class="btn-join-group">Add Member</a>
+        </div>
+{% endblock %}
+{% block content2 %}
+    <div class="member-container">
+        <h2>Members</h2>
+        <ul class="member-list">
+            {% for member in members %}
+                <li>{{ member.username }} (ID: {{ member.id }})</li>
+            {% empty %}
+                <p>No members in this group yet.</p>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+

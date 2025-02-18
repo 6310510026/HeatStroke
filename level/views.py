@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import login
 from django.contrib import messages
 from .models import CustomUser
@@ -58,5 +58,35 @@ def create_group(request):
 
 @login_required
 def group_admin_dashboard(request):
-    user_groups = GroupModel.objects.filter(created_by=request.user)  # ✅ ดึงเฉพาะ Group ที่ User สร้าง
+    user_groups = GroupModel.objects.filter(created_by=request.user)  #  ดึงเฉพาะ Group ที่ User สร้าง
     return render(request, "group_admin_dashboard.html", {"user_groups": user_groups})
+
+@login_required
+def view_group(request, group_id):
+    group = get_object_or_404(GroupModel, id=group_id)  # ✅ ดึงข้อมูลกลุ่ม
+    members = group.members.all()  # ✅ เปลี่ยนจาก user_groups เป็น members
+
+    return render(request, "view_group.html", {"group": group, "members": members})
+
+@login_required
+def add_member(request, group_id):
+    group = get_object_or_404(GroupModel, id=group_id)
+
+    # ✅ ตรวจสอบว่าเฉพาะ Group Admin เท่านั้นที่สามารถเพิ่มสมาชิกได้
+    if request.user != group.created_by:
+        messages.error(request, "Only the Group Admin can add members.")
+        return redirect("view_group", group_id=group.id)
+
+    if request.method == "POST":
+        user_id = request.POST.get("user_id")
+        try:
+            user = CustomUser.objects.get(id=user_id)
+            if user in group.members.all():
+                messages.error(request, f"User ID {user_id} is already a member of this group.")
+            else:
+                group.members.add(user)  # ✅ เพิ่มผู้ใช้เข้ากลุ่ม
+                messages.success(request, f"User ID {user_id} has been added to the group!")
+        except CustomUser.DoesNotExist:
+            messages.error(request, "User ID not found.")
+
+    return render(request, "add_member.html", {"group": group})
