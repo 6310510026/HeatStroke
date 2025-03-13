@@ -26,6 +26,15 @@ h1 {
     margin: 0;
 }
 
+.green-link {
+    color: #006400; /* สีเขียวเข้ม */
+    text-decoration: none;
+}
+
+.green-link:hover {
+    color: #009900;
+    text-decoration: underline;
+}
 /* ปรับปุ่ม toggle ให้อยู่ภายใน header และฝั่งขวา */
 .sidebar-toggle {
     font-size: 20px; /* ขนาดของไอคอนในปุ่ม */
@@ -190,7 +199,7 @@ body.login .login-form-container form input[type="email"]:focus{
 body.login .login-form-container form button {
     padding: 8px 9px; /* ลดขนาด padding */
     font-size: 0.9rem; /* ลดขนาดข้อความ */
-    width: 20%; /* ให้ขนาดของปุ่มพอดีกับข้อความ */
+    width: auto; /* ให้ขนาดของปุ่มพอดีกับข้อความ */
     border-radius: 5px; /* ขอบมนเหมือนเดิม */
     background-color: #006400; /* สีพื้นหลัง */
     color: white; /* สีข้อความ */

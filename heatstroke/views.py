@@ -72,7 +72,7 @@ def index(request):
     
 @login_required
 def member_dashboard(request):
-    return render(request, "index.html") #ควรเปลี่ยนเป็น display_data
+    return render(request, "receive.html") #ควรเปลี่ยนเป็น receive
 
 def information(request):
     return render(request, "information.html")

@@ -9,7 +9,7 @@
 <body class="{% block body_class %}{% endblock %}">
     <header>
         {% block header  %}
-        <h1>Heatstroke Risk Estimation</h1>
+        <h1><a href="{% url 'index' %}" class="green-link">Heatstroke Risk Estimation</a></h1>
         <!-- ปุ่ม toggle อยู่ใน header -->
         <label for="sidebar-toggle" class="sidebar-toggle">☰</label>
         {% endblock  %}
