@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import CustomUser
 from django.contrib.auth.decorators import login_required
 from .models import GroupModel
+from .forms import UserProfileForm
 
 
 def register(request):
@@ -90,3 +91,27 @@ def add_member(request, group_id):
             messages.error(request, "User ID not found.")
 
     return render(request, "add_member.html", {"group": group})
+    
+    
+
+@login_required
+def update_profile(request):
+    user = request.user
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect("user_profile")  # แสดงหน้าผู้ใช้ที่อัพเดทแล้ว
+    else:
+        form = UserProfileForm(instance=user)
+
+    return render(request, "update_profile.html", {"form": form})
+
+@login_required
+def user_profile(request):
+    # ดึงข้อมูลของผู้ใช้จาก request
+    user = request.user
+    
+    # ส่งข้อมูลไปยัง template
+    return render(request, "user_profile.html", {"user": user})

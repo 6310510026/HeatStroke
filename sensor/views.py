@@ -19,9 +19,9 @@ def receive_sensor_data(request):
             skin_resistance = data.get("skin_resistance")
 
             # ตรวจสอบว่าผู้ใช้มีอยู่ในระบบหรือไม่
-            from django.contrib.auth import get_user_model
-            User = get_user_model()
-            user = User.objects.get(id=user_id)
+            #from django.contrib.auth import get_user_model
+            #User = get_user_model()
+            #user = User.objects.get(id=user_id)
 
             # บันทึกข้อมูลลงฐานข้อมูล
             sensor_data = SensorData.objects.create(

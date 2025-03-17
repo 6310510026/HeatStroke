@@ -24,38 +24,13 @@
         <h2>Members</h2>
         <ul class="member-list">
             {% for member in members %}
+                <div>
+                <!-- <li><a href="{% url 'user_profile' member.id %}">{{ member.username }} (ID: {{ member.id }})</a></li> -->
                 <li>{{ member.username }} (ID: {{ member.id }})</li>
+                </div>
             {% empty %}
                 <p>No members in this group yet.</p>
             {% endfor %}
         </ul>
     </div>
 {% endblock %}
-
-<script>
-    const groupId = {{ group.id }};
-    const socket = new WebSocket(`ws://127.0.0.1:8000/ws/group/${groupId}/`);
-
-    // เมื่อเชื่อมต่อกับ WebSocket
-    socket.onopen = function(e) {
-        console.log("Connected to WebSocket!");
-    };
-
-    // เมื่อได้รับข้อมูลจาก WebSocket
-    socket.onmessage = function(e) {
-        const data = JSON.parse(e.data);
-        const message = data.message;
-
-        // อัปเดตข้อมูลสมาชิก (ตัวอย่างที่ได้รับมาจาก WebSocket)
-        const memberList = document.getElementById('member-list');
-        const newMember = document.createElement('li');
-        newMember.textContent = message;
-        memberList.appendChild(newMember);
-    };
-
-    // ส่งข้อมูลไปยัง WebSocket (เมื่อมีการเพิ่มสมาชิก)
-    document.querySelector('.btn-join-group').addEventListener('click', function() {
-        const message = "New member added!";
-        socket.send(JSON.stringify({'message': message}));
-    });
-</script>

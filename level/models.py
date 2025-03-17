@@ -15,6 +15,11 @@ class CustomUser(AbstractUser):
         related_name="group_members",  # ✅ เปลี่ยน related_name เพื่อไม่ให้ชนกับ GroupModel
         blank=True
     )
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+    age = models.IntegerField(null=True, blank=True)  # อายุ
+    height = models.FloatField(null=True, blank=True)  # ส่วนสูง
+    weight = models.FloatField(null=True, blank=True)  # น้ำหนัก
 
     def is_site_admin(self):
         return self.role == "site_admin"
