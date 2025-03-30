@@ -25,7 +25,7 @@
         <ul class="member-list">
             {% for member in members %}
                 <div>
-                <!-- <li><a href="{% url 'user_profile' member.id %}">{{ member.username }} (ID: {{ member.id }})</a></li> -->
+                <a href="{% url 'user_profile' member.id %}">View Profile</a>
                 <li>{{ member.username }} (ID: {{ member.id }})</li>
                 </div>
             {% empty %}

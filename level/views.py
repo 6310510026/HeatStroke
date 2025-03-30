@@ -95,23 +95,25 @@ def add_member(request, group_id):
     
 
 @login_required
-def update_profile(request):
-    user = request.user
+def update_profile(request, user_id):
+    # ดึงข้อมูลผู้ใช้จากฐานข้อมูลโดยใช้ user_id
+    user = get_object_or_404(CustomUser, id=user_id)
+    
     if request.method == "POST":
         form = UserProfileForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
             messages.success(request, "Profile updated successfully!")
-            return redirect("user_profile")  # แสดงหน้าผู้ใช้ที่อัพเดทแล้ว
+            return redirect("user_profile", user_id=user.id)  # ส่ง user_id ไปใน redirect
     else:
         form = UserProfileForm(instance=user)
 
     return render(request, "update_profile.html", {"form": form})
 
 @login_required
-def user_profile(request):
-    # ดึงข้อมูลของผู้ใช้จาก request
-    user = request.user
+def user_profile(request, user_id):
+    # ดึงข้อมูลผู้ใช้จากฐานข้อมูลด้วย user_id ที่ส่งมา
+    user = get_object_or_404(CustomUser, id=user_id)
     
-    # ส่งข้อมูลไปยัง template
-    return render(request, "user_profile.html", {"user": user})
+    # ส่งข้อมูลผู้ใช้ไปยังเทมเพลต
+    return render(request, 'user_profile.html', {'user': user})

@@ -13,5 +13,5 @@
     {{ form.as_p }}
     <button type="submit">Save Changes</button>
   </form>
-  <a href="{% url 'user_profile' %}" class="btn-join-group">Back</a>
+  <a href="{% url 'user_profile' user_id=request.user.id %}" class="btn-join-group">Back</a>
 {% endblock %}
