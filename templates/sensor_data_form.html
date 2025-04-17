@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+{% block title %} Enter Sensor Data {% endblock %}
+
+{% block content %}
+    <h1>Enter Sensor Data</h1>
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- ฟอร์มจะถูกแสดงในรูปแบบพารากราฟ -->
+        <button type="submit">Submit</button>
+    </form>
+
+{% endblock %}

@@ -15,5 +15,6 @@
     <br>
     <a href="{% url 'sensor:display_data' %}" class="btn-join-group">View Sensor Data</a>
     <a href="{% url 'user_profile' user_id=request.user.id %}" class="btn-join-group">Your Profile</a>
+    <a href="{% url 'sensor:receive_sensor_data' %}" class="btn-join-group">Fill Sensor Data</a>
     
 {% endblock  %}
