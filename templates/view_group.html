@@ -19,14 +19,55 @@
             <a href="{% url 'add_member' group.id %}" class="btn-join-group">Add Member</a>
         </div>
 {% endblock %}
+
 {% block content2 %}
     <div class="member-container">
         <h2>Members</h2>
         <ul class="member-list">
             {% for member in members %}
-                <div>
-                <a href="{% url 'user_profile' member.id %}">View Profile</a>
-                <li>{{ member.username }} (ID: {{ member.id }})</li>
+                <div id="member_{{ member.id }}">
+                    <a href="{% url 'user_profile' member.id %}">View Profile</a>
+                    <li>{{ member.username }} (ID: {{ member.id }})</li>
+
+                    <!-- เพิ่ม <span> สำหรับแสดงข้อมูลสุขภาพของสมาชิก -->
+                    <p>Heart Rate: <span id="heart_rate_{{ member.id }}">Loading...</span></p>
+                    <p>Skin Temperature: <span id="skin_temperature_{{ member.id }}">Loading...</span></p>
+                    <p>Aambient Temperature: <span id="ambient_temperature_{{ member.id }}">Loading...</span></p>
+                    <p>Humidity: <span id="humidity_{{ member.id }}">Loading...</span></p>
+                    <p>Skin Resistance: <span id="skin_resistance_{{ member.id }}">Loading...</span></p>
+                    <p>Timestamp: <span id="timestamp_{{ member.id }}">Loading...</span></p>
+
+                    <!-- Script WebSocket -->
+                    <script>
+                        const socket = new WebSocket('ws://127.0.0.1:8000/ws/sensor/');
+
+                        socket.onopen = function(e) {
+                            console.log("Connected to WebSocket!");
+                        };
+
+                        socket.onmessage = function(e) {
+                            const data = JSON.parse(e.data);
+
+                            if (data.error) {
+                                console.log(data.error);
+                            } else {
+                                // รับข้อมูลจาก WebSocket สำหรับสมาชิกที่ตรงกับ ID
+                                const memberId = data.member_id;  // สมมุติว่า WebSocket ส่ง member_id ด้วย
+                                if (memberId == {{ member.id }}) {
+                                    document.getElementById('heart_rate_' + memberId).innerText = data.heart_rate;
+                                    document.getElementById('skin_temperature_' + memberId).innerText = data.skin_temperature;
+                                    document.getElementById('ambient_temperature_' + memberId).innerText = data.ambient_temperature;
+                                    document.getElementById('humidity_' + memberId).innerText = data.humidity;
+                                    document.getElementById('skin_resistance_' + memberId).innerText = data.skin_resistance;
+                                    document.getElementById('timestamp_' + memberId).innerText = data.timestamp;
+                                }
+                            }
+                        };
+
+                        socket.onclose = function(e) {
+                            console.log("Disconnected from WebSocket.");
+                        };
+                    </script>
                 </div>
             {% empty %}
                 <p>No members in this group yet.</p>

@@ -15,19 +15,17 @@ from django.core.asgi import get_asgi_application
 from channels.auth import AuthMiddlewareStack
 from django.urls import path
 from . import consumers  # ปรับชื่อให้ตรงกับแอปของคุณ
+import sensor.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'heatstroke.settings')
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
-    "websocket": AuthMiddlewareStack(
-        URLRouter(
-            [
-                # เส้นทาง WebSocket สำหรับการเชื่อมต่อข้อมูล real-time ใน group
-                path('ws/group/<int:group_id>/', consumers.GroupConsumer.as_asgi()),
-            ]
-        )
+    "websocket": URLRouter(
+        # Ensure this matches the path in JavaScript
+        sensor.routing.websocket_urlpatterns
     ),
 })
+
 
 

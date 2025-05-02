@@ -12,11 +12,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-
+from urllib.parse import urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+DATABASE_URL = os.getenv('DATABASE_URL')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -80,12 +80,12 @@ ASGI_APPLICATION = 'heatstroke.asgi.application'  # ระบุให้ Django
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        'USER': 'user',
-        'PASSWORD': 'password',
-        'HOST': 'db',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mydb',  # ชื่อฐานข้อมูล
+        'USER': 'myuser',  # ชื่อผู้ใช้
+        'PASSWORD': 'mypassword',  # รหัสผ่าน
+        'HOST': 'db',  # ใช้ชื่อ service ที่กำหนดใน docker-compose.yml
+        'PORT': '5432',  # พอร์ตฐานข้อมูล PostgreSQL
     }
 }
 

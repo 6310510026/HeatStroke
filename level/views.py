@@ -5,6 +5,8 @@ from .models import CustomUser
 from django.contrib.auth.decorators import login_required
 from .models import GroupModel
 from .forms import UserProfileForm
+from django.views.decorators.csrf import csrf_exempt
+
 
 
 def register(request):
@@ -37,7 +39,6 @@ def register(request):
         return redirect("login")
     return render(request, "register.html")
 
-
 @login_required
 def create_group(request):
     if not request.user.is_group_admin():
@@ -57,11 +58,13 @@ def create_group(request):
 
     return render(request, "create_group.html")
 
+@csrf_exempt
 @login_required
 def group_admin_dashboard(request):
     user_groups = GroupModel.objects.filter(created_by=request.user)  #  ดึงเฉพาะ Group ที่ User สร้าง
     return render(request, "group_admin_dashboard.html", {"user_groups": user_groups})
 
+@csrf_exempt
 @login_required
 def view_group(request, group_id):
     group = get_object_or_404(GroupModel, id=group_id)  # ✅ ดึงข้อมูลกลุ่ม
@@ -69,6 +72,8 @@ def view_group(request, group_id):
 
     return render(request, "view_group.html", {"group": group, "members": members})
 
+
+@csrf_exempt
 @login_required
 def add_member(request, group_id):
     group = get_object_or_404(GroupModel, id=group_id)
@@ -93,7 +98,7 @@ def add_member(request, group_id):
     return render(request, "add_member.html", {"group": group})
     
     
-
+@csrf_exempt
 @login_required
 def update_profile(request, user_id):
     # ดึงข้อมูลผู้ใช้จากฐานข้อมูลโดยใช้ user_id
@@ -110,6 +115,7 @@ def update_profile(request, user_id):
 
     return render(request, "update_profile.html", {"form": form})
 
+@csrf_exempt
 @login_required
 def user_profile(request, user_id):
     # ดึงข้อมูลผู้ใช้จากฐานข้อมูลด้วย user_id ที่ส่งมา

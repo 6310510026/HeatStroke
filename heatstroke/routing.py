@@ -1,8 +1,8 @@
-# your_app/routing.py
-
-from django.urls import path
+# routing.py ในแอปที่คุณใช้ WebSocket
+from django.urls import re_path
 from . import consumers
 
+# กำหนด routing สำหรับ WebSocket
 websocket_urlpatterns = [
-    path('ws/some_path/', consumers.MyConsumer.as_asgi()),
+    re_path(r'ws/sensor/$', consumers.SensorConsumer.as_asgi()),
 ]

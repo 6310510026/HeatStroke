@@ -1,4 +1,3 @@
-
 # ใช้ base image ที่เป็น Python
 FROM python:3.12-slim
 
@@ -8,13 +7,11 @@ WORKDIR /app
 # คัดลอกไฟล์จากเครื่องมาสู่ container
 COPY requirements.txt /app/
 
-
 # ติดตั้ง dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # คัดลอกไฟล์ทั้งหมดจากโปรเจคไปยัง container
-COPY ./static /app/static
-
+COPY . /app/
 
 # รันคำสั่ง collectstatic เพื่อรวบรวม static files
 RUN python manage.py collectstatic --noinput

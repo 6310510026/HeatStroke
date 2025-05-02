@@ -71,3 +71,4 @@ uvicorn==0.18.3
 virtualenv==20.26.0
 virtualenv-clone==0.5.7
 zope.interface==7.2
+psycopg2-binary

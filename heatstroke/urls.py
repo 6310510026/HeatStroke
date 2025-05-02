@@ -19,6 +19,7 @@ from django.urls import path, include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from . import consumers  # สำหรับนำ WebSocket consumer เข้ามา
 
 
 urlpatterns = [
@@ -33,5 +34,9 @@ urlpatterns = [
     path("", include("level.urls")),
 ]
 
+# URL patterns สำหรับ WebSocket
+websocket_urlpatterns = [
+    path('ws/sensor/', consumers.SensorConsumer.as_asgi(), name='sensor_data'),  # URL สำหรับ WebSocket
+]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

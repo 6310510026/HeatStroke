@@ -11,6 +11,8 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    environment:
+      - DATABASE_URL=postgres://myuser:mypassword@db:5432/mydb  # Add the environment variable for DB connection
 
   db:
     image: postgres:13
@@ -20,8 +22,9 @@ services:
       POSTGRES_PASSWORD: mypassword
     volumes:
       - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"  # Expose port for external connections (optional)
 
 volumes:
   pg_data:
   static_volume:
-  postgres_data:
